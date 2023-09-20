@@ -22,7 +22,7 @@ async def get_prods():
 
 @prod.post("/addProds", response_model=Product)
 async def create_prods(prod: Product):
-    new_prod = {"prodName": prod.prodName, "precioProd": prod.prodPrice}
+    new_prod = {"prodName": prod.prodName, "prodPrice": prod.prodPrice}
     with Session(engine) as session:
         result = session.execute(prods.insert().values(new_prod))
         session.commit()
@@ -47,7 +47,7 @@ async def delete_prods(id: int):
 @prod.put("/updateProds/{id}", response_model=Product)
 async def update_prods(id: int, prod: Product):
     
-    updated_prod = {"prodName": prod.prodName, "precioProd": prod.prodPrice}
+    updated_prod = {"prodName": prod.prodName, "prodPrice": prod.prodPrice}
     with Session(engine) as session:
         result = session.execute(prods.update().values(updated_prod).where(prods.c.id == id))
         session.commit()
