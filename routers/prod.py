@@ -14,13 +14,13 @@ f = Fernet(key)
 prod = APIRouter()
 
 
-@prod.get("/prodsList", response_model=list[Product])
+@prod.get("/products", response_model=list[Product])
 async def get_prods():
         with Session(engine) as session:
          return session.execute(prods.select()).fetchall()
 
 
-@prod.post("/addProds", response_model=Product)
+@prod.post("/products", response_model=Product)
 async def create_prods(prod: Product):
     new_prod = {"prodName": prod.prodName, "prodPrice": prod.prodPrice}
     with Session(engine) as session:
@@ -30,13 +30,13 @@ async def create_prods(prod: Product):
 
 
 
-@prod.get("/prodsList/{id}",response_model=Product)
+@prod.get("/products/{id}",response_model=Product)
 async def get_prods(id: int):
         with Session(engine) as session:
             return session.execute(prods.select().where(prods.c.id == id)).first()
 
 
-@prod.delete("/deleteProds/{id}", status_code=status.HTTP_204_NO_CONTENT)
+@prod.delete("/products/{id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_prods(id: int):
     with Session(engine) as session:
         result = session.execute(prods.delete().where(prods.c.id == id))
@@ -44,7 +44,7 @@ async def delete_prods(id: int):
         return HTTP_204_NO_CONTENT
 
 
-@prod.put("/updateProds/{id}", response_model=Product)
+@prod.put("/products/{id}", response_model=Product)
 async def update_prods(id: int, prod: Product):
     
     updated_prod = {"prodName": prod.prodName, "prodPrice": prod.prodPrice}

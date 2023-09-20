@@ -14,13 +14,13 @@ f = Fernet(key)
 user = APIRouter()
 
 
-@user.get("/usersList", response_model=list[User])
+@user.get("/users", response_model=list[User])
 async def get_users():
         with Session(engine) as session:
          return session.execute(users.select()).fetchall()
 
 
-@user.post("/addUsers", response_model=User)
+@user.post("/users", response_model=User)
 async def create_users(user: User):
     new_user = {"name": user.name, "email": user.email}
     #new_user["password"] = f.encrypt(user.password.encode("utf-8"))
@@ -31,13 +31,13 @@ async def create_users(user: User):
 
 
 
-@user.get("/usersList/{id}",response_model=User)
+@user.get("/users/{id}",response_model=User)
 async def get_user(id: int):
         with Session(engine) as session:
             return session.execute(users.select().where(users.c.id == id)).first()
 
 
-@user.delete("/deletUsers/{id}", status_code=status.HTTP_204_NO_CONTENT)
+@user.delete("/users/{id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_user(id: int):
     with Session(engine) as session:
         result = session.execute(users.delete().where(users.c.id == id))
@@ -45,7 +45,7 @@ async def delete_user(id: int):
         return HTTP_204_NO_CONTENT
 
 
-@user.put("/usersUpdate/{id}", response_model=User)
+@user.put("/users/{id}", response_model=User)
 async def update_user(id: int, user: User):
     
     updated_user = {"name": user.name, "email": user.email}

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from routers.user import user
 from routers.prod import prod
-from routers.purch import purchase
+from routers.purchases import purchase
 
 app = FastAPI()
     
