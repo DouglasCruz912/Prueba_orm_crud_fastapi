@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from config.db import engine
 from models.user import users
 from models.purchases import purchases
+from schemas.purchases import Purchases
 
 purchase = APIRouter()
 
@@ -14,18 +15,9 @@ purchase = APIRouter()
 #            raise HTTPException(status_code=404, detail="User not found")
 #        return list(user)
     
-@purchase.get("/users/{id}/purchases")
+@purchase.get("/purchases", response_model=list[Purchases])
 def read_user_purchases(id: int):
-    with Session(engine) as session:
-        user = session.query(users).filter(users.c.id == id).first()
-        if not user:
-            raise HTTPException(status_code=404, detail="User not found")
-        
-        user_purchases = session.query(purchases).join(users, users.c.id == purchases.c.user_id).filter(users.c.id == id).all()
-        return [purchase.to_dict() for purchase in user_purchases]
+        with Session(engine) as session:
+         return session.execute(purchases.select()).fetchall()
     
 
-
-
-
-      
